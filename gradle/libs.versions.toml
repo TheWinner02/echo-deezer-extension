@@ -1,0 +1,7 @@
+[versions]
+common = "1.0.0"
+kotlinStdlib = "2.4.10"
+
+[libraries]
+common = { group = "dev.brahmkshatriya.echo", name = "common", version.ref = "common" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }

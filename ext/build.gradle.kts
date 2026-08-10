@@ -2,7 +2,7 @@ plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 java {
@@ -15,9 +15,8 @@ kotlin {
 }
 
 dependencies {
-    val libVersion: String by project
-    compileOnly("dev.brahmkshatriya.echo:common:$libVersion")
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:2.2.10")
+    compileOnly(libs.common)
+    compileOnly(libs.kotlin.stdlib)
 }
 
 val extType: String by project
@@ -34,10 +33,10 @@ val extAuthorUrl: String? by project
 val extRepoUrl: String? by project
 val extUpdateUrl: String? by project
 
-val gitHash = execute("git", "rev-parse", "HEAD").take(7)
-val gitCount = execute("git", "rev-list", "--count", "HEAD").toInt()
-val verCode = gitCount
-val verName = "v$gitHash"
+val verCode = (project.findProperty("extVersionCode") as? String)?.toIntOrNull()
+    ?: runCatching { execute("git", "rev-list", "--count", "HEAD").toInt() }.getOrDefault(1)
+val verName = (project.findProperty("extVersionName") as? String)
+    ?: runCatching { "v" + execute("git", "rev-parse", "HEAD").take(7) }.getOrDefault("v1.0.0")
 
 publishing {
     publications {

@@ -121,8 +121,9 @@ class DeezerTrackClient(private val deezerExtension: DeezerExtension, private va
             streamable
         }
 
+        val title = resolvedStreamable.title ?: streamable.title
         return if (resolvedStreamable.quality == 12) {
-            resolvedStreamable.id.toSource().toMedia()
+            resolvedStreamable.id.toSource().copy(title = title).toMedia()
         } else {
             val contentLength = Utils.getContentLength(resolvedStreamable.id, client)
             Streamable.InputProvider { start, _ ->
@@ -130,7 +131,7 @@ class DeezerTrackClient(private val deezerExtension: DeezerExtension, private va
                     AudioStreamProvider.openStream(resolvedStreamable, client, start),
                     contentLength - start
                 )
-            }.toSource(id = resolvedStreamable.id).toMedia()
+            }.toSource(id = resolvedStreamable.id).copy(title = title).toMedia()
         }
     }
 
