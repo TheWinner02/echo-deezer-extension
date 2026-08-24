@@ -73,9 +73,9 @@ class DeezerTrackClient(private val deezerExtension: DeezerExtension, private va
             }
 
             val qualityValue = when (quality) {
-                "flac" -> 9
-                "320" -> 6
-                "128" -> 3
+                "flac" -> 1411
+                "320" -> 320
+                "128" -> 128
                 else -> 0
             }
             val qualityTitle = when (quality) {
@@ -161,9 +161,9 @@ class DeezerTrackClient(private val deezerExtension: DeezerExtension, private va
         } else {
             qualityOptions.map { quality ->
                 val qualityValue = when (quality) {
-                    "flac" -> 9
-                    "320" -> 6
-                    "128" -> 3
+                    "flac" -> 1411
+                    "320" -> 320
+                    "128" -> 128
                     else -> 0
                 }
                 val qualityTitle = when (quality) {
