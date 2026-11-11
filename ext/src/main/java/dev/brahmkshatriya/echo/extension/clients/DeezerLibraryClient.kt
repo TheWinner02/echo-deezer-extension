@@ -1,5 +1,7 @@
 package dev.brahmkshatriya.echo.extension.clients
 
+import dev.brahmkshatriya.echo.extension.ExtensionText
+
 import dev.brahmkshatriya.echo.common.models.Feed
 import dev.brahmkshatriya.echo.common.models.Feed.Companion.toFeedData
 import dev.brahmkshatriya.echo.common.models.Shelf
@@ -24,13 +26,13 @@ class DeezerLibraryClient(
     private val cpuDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    private val tabs: List<Tab> = listOf(
-        Tab(TabId.ALL.id, "All"),
-        Tab(TabId.PLAYLISTS.id, "Playlists"),
-        Tab(TabId.ALBUMS.id, "Albums"),
-        Tab(TabId.TRACKS.id, "Tracks"),
-        Tab(TabId.ARTISTS.id, "Artists"),
-        Tab(TabId.SHOWS.id, "Podcasts")
+    private val tabs: List<Tab> get() = listOf(
+        Tab(TabId.ALL.id, ExtensionText.get("providers.all_a52ace", "All")),
+        Tab(TabId.PLAYLISTS.id, ExtensionText.get("providers.playlists_dcd0a4", "Playlists")),
+        Tab(TabId.ALBUMS.id, ExtensionText.get("providers.albums_57bca6", "Albums")),
+        Tab(TabId.TRACKS.id, ExtensionText.get("providers.tracks_889801", "Tracks")),
+        Tab(TabId.ARTISTS.id, ExtensionText.get("providers.artists_94e3e8", "Artists")),
+        Tab(TabId.SHOWS.id, ExtensionText.get("providers.podcasts_6ac749", "Podcasts"))
     )
 
     private data class TabConfig(
@@ -49,12 +51,12 @@ class DeezerLibraryClient(
         SHOWS("shows")
     }
 
-    private val configs: Map<String, TabConfig> = listOf(
-        TabConfig(TabId.PLAYLISTS, "Playlists", { getPlaylists() }) { it.tabDataArray("playlists") },
-        TabConfig(TabId.ALBUMS, "Albums", { getAlbums() }) { it.tabDataArray("albums") },
-        TabConfig(TabId.TRACKS, "Tracks", { getTracks() }) { it.resultsDataArray() },
-        TabConfig(TabId.ARTISTS, "Artists", { getArtists() }) { it.tabDataArray("artists") },
-        TabConfig(TabId.SHOWS, "Podcasts", { getShows() }) { it.tabDataArray("shows") },
+    private val configs: Map<String, TabConfig> get() = listOf(
+        TabConfig(TabId.PLAYLISTS, ExtensionText.get("providers.playlists_dcd0a4", "Playlists"), { getPlaylists() }) { it.tabDataArray("playlists") },
+        TabConfig(TabId.ALBUMS, ExtensionText.get("providers.albums_57bca6", "Albums"), { getAlbums() }) { it.tabDataArray("albums") },
+        TabConfig(TabId.TRACKS, ExtensionText.get("providers.tracks_889801", "Tracks"), { getTracks() }) { it.resultsDataArray() },
+        TabConfig(TabId.ARTISTS, ExtensionText.get("providers.artists_94e3e8", "Artists"), { getArtists() }) { it.tabDataArray("artists") },
+        TabConfig(TabId.SHOWS, ExtensionText.get("providers.podcasts_6ac749", "Podcasts"), { getShows() }) { it.tabDataArray("shows") },
     ).associateBy { it.id.id }
 
 

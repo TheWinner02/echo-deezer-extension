@@ -1,5 +1,7 @@
 package dev.brahmkshatriya.echo.extension
 
+import dev.brahmkshatriya.echo.common.providers.GlobalSettingsProvider
+
 import dev.brahmkshatriya.echo.common.clients.AlbumClient
 import dev.brahmkshatriya.echo.common.clients.ArtistClient
 import dev.brahmkshatriya.echo.common.clients.FollowClient
@@ -63,7 +65,11 @@ import kotlinx.serialization.json.jsonPrimitive
 class DeezerExtension : HomeFeedClient, TrackClient, LikeClient, RadioClient,
     SearchFeedClient, QuickSearchClient,AlbumClient, ArtistClient, FollowClient, PlaylistClient, LyricsClient, ShareClient,
     TrackerClient, LoginClient.WebView, LoginClient.CustomInput,
-    LibraryFeedClient, PlaylistEditClient, SaveClient {
+    LibraryFeedClient, PlaylistEditClient, SaveClient, GlobalSettingsProvider {
+    override fun setGlobalSettings(globalSettings: Settings) {
+        ExtensionText.settings = globalSettings
+    }
+
 
     private val session by lazy { DeezerSession.getInstance() }
     private val api by lazy { DeezerApi(session) }
@@ -72,33 +78,33 @@ class DeezerExtension : HomeFeedClient, TrackClient, LikeClient, RadioClient,
     override suspend fun getSettingItems(): List<Setting> {
         return listOf(
             SettingList(
-                "Use Proxy",
+                ExtensionText.get("providers.use_proxy_72479c", "Use Proxy"),
                 "proxy",
-                "Use proxy to prevent GEO-Blocking",
-                mutableListOf("No Proxy", "UK 1", "UK 2", "RU 1", "RU 2", "MD"),
+                ExtensionText.get("providers.use_proxy_to_prevent_geo_blocking_8daf1e", "Use proxy to prevent GEO-Blocking"),
+                mutableListOf(ExtensionText.get("providers.no_proxy_917ba4", "No Proxy"), "UK 1", "UK 2", "RU 1", "RU 2", "MD"),
                 mutableListOf("", "uk1.proxy.murglar.app", "uk2.proxy.murglar.app", "ru1.proxy.murglar.app", "ru2.proxy.murglar.app", "md.proxy.murglar.app"),
                 0
             ),
             SettingSwitch(
-                "Enable Logging",
+                ExtensionText.get("providers.enable_logging_974ffd", "Enable Logging"),
                 "log",
-                "Enables logging to deezer",
+                ExtensionText.get("providers.enables_logging_to_deezer_7cfca6", "Enables logging to deezer"),
                 false
             ),
             SettingSwitch(
-                "Enable Search History",
+                ExtensionText.get("providers.enable_search_history_af5ab6", "Enable Search History"),
                 "history",
-                "Enables the search history",
+                ExtensionText.get("providers.enables_the_search_history_c20895", "Enables the search history"),
                 true
             ),
             SettingCategory(
-                "Quality",
+                ExtensionText.get("providers.quality_1b2c08", "Quality"),
                 "quality",
                 mutableListOf(
                     SettingSlider(
-                        "Image Quality",
+                        ExtensionText.get("providers.image_quality_324421", "Image Quality"),
                         "image_quality",
-                        "Choose your preferred image quality (Can impact loading times)",
+                        ExtensionText.get("providers.choose_your_preferred_image_quality_can_impact_l_b409c7", "Choose your preferred image quality (Can impact loading times)"),
                         240,
                         120,
                         1920,
@@ -107,36 +113,36 @@ class DeezerExtension : HomeFeedClient, TrackClient, LikeClient, RadioClient,
                 )
             ),
             SettingCategory(
-                "Language & Country",
+                ExtensionText.get("providers.language_country_59aa6e", "Language & Country"),
                 "langcount",
                 mutableListOf(
                     SettingList(
-                        "Language",
+                        ExtensionText.get("providers.language_a4fe65", "Language"),
                         "lang",
-                        "Choose your preferred language for loaded stuff",
-                        DeezerCountries.languages.map { it.name },
+                        ExtensionText.get("providers.choose_your_preferred_language_for_loaded_stuff_afab42", "Choose your preferred language for loaded stuff"),
+                        DeezerCountries.languages.map { java.util.Locale.forLanguageTag(it.code).getDisplayName(ExtensionText.locale()) },
                         DeezerCountries.languages.map { it.code },
                         getDefaultLanguageIndex(session.settings)
                     ),
                     SettingList(
-                        "Country",
+                        ExtensionText.get("providers.country_701d02", "Country"),
                         "country",
-                        "Choose your preferred country for browse recommendations",
-                        DeezerCountries.countries.map { it.name },
+                        ExtensionText.get("providers.choose_your_preferred_country_for_browse_recomme_b1f4e6", "Choose your preferred country for browse recommendations"),
+                        DeezerCountries.countries.map { ExtensionText.country(it.code) },
                         DeezerCountries.countries.map { it.code },
                         getDefaultCountryIndex(session.settings)
                     )
                 )
             ),
             SettingCategory(
-                "Appearance",
+                ExtensionText.get("providers.appearance_3907fa", "Appearance"),
                 "appearance",
                 mutableListOf(
                     SettingList(
-                        "Shelf Type",
+                        ExtensionText.get("providers.shelf_type_27dbf4", "Shelf Type"),
                         "shelf",
-                        "Choose your preferred shelf type",
-                        mutableListOf("Grid", "Linear"),
+                        ExtensionText.get("providers.choose_your_preferred_shelf_type_3f6de0", "Choose your preferred shelf type"),
+                        mutableListOf(ExtensionText.get("providers.grid_0d7d12", "Grid"), ExtensionText.get("providers.linear_e6950b", "Linear")),
                         mutableListOf("grid", "linear"),
                         0
                     )
@@ -478,22 +484,22 @@ class DeezerExtension : HomeFeedClient, TrackClient, LikeClient, RadioClient,
         }
     }
 
-    override val forms: List<LoginClient.Form> = listOf(
+    override val forms: List<LoginClient.Form> get() = listOf(
         LoginClient.Form(
             key = "userPass",
-            label = "E-Mail and Password",
+            label = ExtensionText.get("providers.e_mail_and_password_583344", "E-Mail and Password"),
             icon = LoginClient.InputField.Type.Email,
             inputFields = listOf(
                 LoginClient.InputField(
                     type = LoginClient.InputField.Type.Email,
                     key = "email",
-                    label = "E-Mail",
+                    label = ExtensionText.get("providers.e_mail_2fae6f", "E-Mail"),
                     isRequired = true,
                 ),
                 LoginClient.InputField(
                     type = LoginClient.InputField.Type.Password,
                     key = "pass",
-                    label = "Password",
+                    label = ExtensionText.get("providers.password_e7cf3e", "Password"),
                     isRequired = true
                 )
             )

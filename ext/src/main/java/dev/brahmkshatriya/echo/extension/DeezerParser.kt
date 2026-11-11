@@ -168,8 +168,8 @@ class DeezerParser(private val session: DeezerSession) {
             description = str("description").orEmpty(),
             subtitle = str("subtitle")
                 ?: when {
-                    trackCount != null && rd != null -> "$trackCount Songs • $rd"
-                    trackCount != null -> "$trackCount Songs"
+                    trackCount != null && rd != null -> ExtensionText.get("providers.1_d_songs_02190b", "%1\$d songs", trackCount) + " · $rd"
+                    trackCount != null -> ExtensionText.get("providers.1_d_songs_02190b", "%1\$d songs", trackCount)
                     else -> rd?.toString()
                 }
         )
@@ -248,8 +248,8 @@ class DeezerParser(private val session: DeezerSession) {
             cover = getCover(md5, type),
             description = data.str("DESCRIPTION").orEmpty(),
             subtitle = str("subtitle") ?: when {
-                tracks != null && created != null -> "$tracks Songs • $created"
-                tracks != null -> "$tracks Songs"
+                tracks != null && created != null -> ExtensionText.get("providers.1_d_songs_02190b", "%1\$d songs", tracks) + " · $created"
+                tracks != null -> ExtensionText.get("providers.1_d_songs_02190b", "%1\$d songs", tracks)
                 else -> created?.toString()
             },
             isEditable = parentUser?.contains(session.credentials.userId) == true,

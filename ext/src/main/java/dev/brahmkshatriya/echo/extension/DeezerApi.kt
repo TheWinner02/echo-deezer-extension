@@ -221,7 +221,7 @@ class DeezerApi(private val session: DeezerSession) {
                     if (result["error"]?.jsonObject["VALID_TOKEN_REQUIRED"]?.jsonPrimitive?.content?.contains("Invalid CSRF token") == true) {
                         if (email.isEmpty() && pass.isEmpty()) {
                             session.isArlExpired(true)
-                            throw Exception("Please re-login (Best use User + Pass method)")
+                            throw Exception(ExtensionText.get("providers.please_re_login_best_use_user_pass_method_d121f9", "Please re-login (Best use User + Pass method)"))
                         } else {
                             session.isArlExpired(false)
                             val userList = DeezerExtension().onLogin("userPass", mapOf(Pair("email", email), Pair("pass", pass)))

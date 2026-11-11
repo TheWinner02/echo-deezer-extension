@@ -1,5 +1,7 @@
 package dev.brahmkshatriya.echo.extension.clients
 
+import dev.brahmkshatriya.echo.extension.ExtensionText
+
 import dev.brahmkshatriya.echo.common.models.Streamable
 import dev.brahmkshatriya.echo.common.models.Streamable.Media.Companion.toMedia
 import dev.brahmkshatriya.echo.common.models.Streamable.Source.Companion.toSource
@@ -96,8 +98,8 @@ class DeezerTrackClient(private val deezerExtension: DeezerExtension, private va
             when (quality) {
                 "flac" -> createStreamableForQuality(track, "320")
                 "320" -> createStreamableForQuality(track, "128")
-                "128" -> throw Exception("Song not available")
-                else -> throw Exception("Song not available")
+                "128" -> throw Exception(ExtensionText.get("providers.song_not_available_a6a5d0", "Song not available"))
+                else -> throw Exception(ExtensionText.get("providers.song_not_available_a6a5d0", "Song not available"))
             }
         }
     }

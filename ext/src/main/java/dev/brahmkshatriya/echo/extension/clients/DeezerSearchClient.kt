@@ -1,5 +1,7 @@
 package dev.brahmkshatriya.echo.extension.clients
 
+import dev.brahmkshatriya.echo.extension.ExtensionText
+
 import dev.brahmkshatriya.echo.common.helpers.PagedData
 import dev.brahmkshatriya.echo.common.models.Feed
 import dev.brahmkshatriya.echo.common.models.Feed.Companion.toFeed
@@ -133,8 +135,7 @@ class DeezerSearchClient(private val deezerExtension: DeezerExtension, private v
             if (tabId !in SKIP_TAB_IDS) {
                 Tab(
                     tabId,
-                    tabId.lowercase()
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() })
+                    ExtensionText.category(tabId))
             } else {
                 null
             }
@@ -146,12 +147,11 @@ class DeezerSearchClient(private val deezerExtension: DeezerExtension, private v
             val dataArray = tabObject?.get("data")?.jsonArray
             parser.run {
                 dataArray?.toShelfItemsList(
-                    name.lowercase()
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() })
+                    ExtensionText.category(name))
             }
         }
         oldSearch = Triple(query, allShelves, resultObject)
-        return listOf(Tab("All", "All")) + tabs
+        return listOf(Tab("All", ExtensionText.get("providers.all_a52ace", "All"))) + tabs
     }
 
     companion object {

@@ -1,5 +1,7 @@
 package dev.brahmkshatriya.echo.extension.clients
 
+import dev.brahmkshatriya.echo.extension.ExtensionText
+
 import dev.brahmkshatriya.echo.common.helpers.PagedData
 import dev.brahmkshatriya.echo.common.models.Artist
 import dev.brahmkshatriya.echo.common.models.EchoMediaItem
@@ -60,7 +62,7 @@ class DeezerArtistClient(private val deezerExtension: DeezerExtension, private v
         private val shelfFactories: Map<String, DeezerParser.(JsonObject) -> Shelf?> = mapOf(
             "TOP" to filterEmpty { jObject ->
                 val shelf =
-                    jObject["data"]?.jsonArray?.toShelfItemsList("Top") as? Shelf.Lists.Items
+                    jObject["data"]?.jsonArray?.toShelfItemsList(ExtensionText.get("providers.top_d5cdfc", "Top")) as? Shelf.Lists.Items
                 val list = (shelf?.list as? List<Track>).orEmpty()
                 if (list.isEmpty()) null
                 else Shelf.Lists.Tracks(
@@ -73,17 +75,17 @@ class DeezerArtistClient(private val deezerExtension: DeezerExtension, private v
                 )
             },
             "HIGHLIGHT" to filterEmpty { jObject ->
-                jObject["ITEM"]?.jsonObject?.toShelfItemsList("Highlight").nullIfEmpty()
+                jObject["ITEM"]?.jsonObject?.toShelfItemsList(ExtensionText.get("providers.highlight_07ccd1", "Highlight")).nullIfEmpty()
             },
             "SELECTED_PLAYLIST" to filterEmpty { jObject ->
-                jObject["data"]?.jsonArray?.toShelfItemsList("Selected Playlists").nullIfEmpty()
+                jObject["data"]?.jsonArray?.toShelfItemsList(ExtensionText.get("providers.selected_playlists_e78003", "Selected Playlists")).nullIfEmpty()
             },
             "RELATED_PLAYLIST" to filterEmpty { jObject ->
-                jObject["data"]?.jsonArray?.toShelfItemsList("Related Playlists").nullIfEmpty()
+                jObject["data"]?.jsonArray?.toShelfItemsList(ExtensionText.get("providers.related_playlists_e2b543", "Related Playlists")).nullIfEmpty()
             },
             "RELATED_ARTISTS" to filterEmpty { jObject ->
                 val shelf =
-                    jObject["data"]?.jsonArray?.toShelfItemsList("Related Artists") as? Shelf.Lists.Items
+                    jObject["data"]?.jsonArray?.toShelfItemsList(ExtensionText.get("providers.related_artists_5a90f8", "Related Artists")) as? Shelf.Lists.Items
                 val list = shelf?.list.orEmpty()
                 if (list.isEmpty()) null
                 else Shelf.Lists.Items(
@@ -97,7 +99,7 @@ class DeezerArtistClient(private val deezerExtension: DeezerExtension, private v
             },
             "ALBUMS" to filterEmpty { jObject ->
                 val shelf =
-                    jObject["data"]?.jsonArray?.toShelfItemsList("Albums") as? Shelf.Lists.Items
+                    jObject["data"]?.jsonArray?.toShelfItemsList(ExtensionText.get("providers.albums_57bca6", "Albums")) as? Shelf.Lists.Items
                 val list = shelf?.list.orEmpty()
                 if (list.isEmpty()) null
                 else Shelf.Lists.Items(
